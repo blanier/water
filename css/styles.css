@@ -1,52 +1,34 @@
+/* grid layot generated from https://grid.layoutit.com/ */
 
-#deck {
-  display: block;
-}
-
-#deckOdds {
-  display: none;
-  grid-template-columns: repeat(52, 1fr);
-  grid-template-rows: repeat(52, 1fr);
-  text-align: center;
-  grid-gap: 2px;
-}
-
-#game {
+.grid-container {
+  width: 100%;
+  height: 100%;
   display: grid;
-  width: 50%;
-  grid-template-columns: repeat(14, 1fr);
-  grid-template-rows: repeat(7, 1fr);
-  text-align: center;
-  grid-gap: 2px;
+  grid-template-columns: 10vw 44vw 44vw;
+  grid-template-rows: 9vh 80vh 9vh;
+  gap: 0px 0px;
+  grid-template-areas:
+    "Header Header Header"
+    "Sidebar Content Content"
+    "Footer Footer Footer";
 }
 
-.card { background-color: lightblue; }
+.Header {
+  grid-area: Header;
+  background: lightgreen;
+}
 
-.card1 { grid-area: 1 / 7 / 2 / 9; }
-.card2 { grid-area: 2 / 6 / 3 / 8; }
-.card3 { grid-area: 2 / 8 / 3 / 10; }
-.card4 { grid-area: 3 / 5 / 4 / 7; }
-.card5 { grid-area: 3 / 7 / 4 / 9; }
-.card6 { grid-area: 3 / 9 / 4 / 11; }
-.card7 { grid-area: 4 / 4 / 5 / 6; }
-.card8 { grid-area: 4 / 6 / 5 / 8; }
-.card9 { grid-area: 4 / 8 / 5 / 10; }
-.card10 { grid-area: 4 / 10 / 5 / 12; }
-.card11 { grid-area: 5 / 3 / 6 / 5; }
-.card12 { grid-area: 5 / 5 / 6 / 7; }
-.card13 { grid-area: 5 / 7 / 6 / 9; }
-.card14 { grid-area: 5 / 9 / 6 / 11; }
-.card15 { grid-area: 5 / 11 / 6 / 13; }
-.card16 { grid-area: 6 / 2 / 7 / 4; }
-.card17 { grid-area: 6 / 4 / 7 / 6; }
-.card18 { grid-area: 6 / 6 / 7 / 8; }
-.card19 { grid-area: 6 / 8 / 7 / 10; }
-.card20 { grid-area: 6 / 10 / 7 / 12; }
-.card21 { grid-area: 6 / 12 / 7 / 14; }
-.card22 { grid-area: 7 / 1 / 8 / 3; }
-.card23 { grid-area: 7 / 3 / 8 / 5; }
-.card24 { grid-area: 7 / 5 / 8 / 7; }
-.card25 { grid-area: 7 / 7 / 8 / 9; }
-.card26 { grid-area: 7 / 9 / 8 / 11; }
-.card27 { grid-area: 7 / 11 / 8 / 13; }
-.card28 { grid-area: 7 / 13 / 8 / 15; }
+.Sidebar {
+  grid-area: Sidebar;
+  background: lightblue;
+}
+
+.Content {
+  grid-area: Content;
+  background: yellow;
+}
+
+.Footer {
+  grid-area: Footer;
+  background: lightgreen;
+}
