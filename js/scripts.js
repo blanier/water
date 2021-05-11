@@ -74,8 +74,8 @@ function onClick(e) {
     return
   }
 
+  let c = divToColumn(block)
   if (srcColumn <0) {
-    c = divToColumn(block)
     if (columnHeight(c) > 0) {
       srcColumn = c
     } else {
@@ -85,7 +85,7 @@ function onClick(e) {
     return
   }
 
-  let dstColumn = divToColumn(block)
+  let dstColumn = c
   if (srcColumn == dstColumn) {
     return
   }
