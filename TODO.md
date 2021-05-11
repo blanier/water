@@ -7,3 +7,12 @@
     - see https://developers.google.com/web/tools/chrome-devtools/workspaces/?utm_source=devtools
   - basic grid main page layout
     - generated from https://grid.layoutit.com/
+
+
+- generate grid layout for varying numbers of tubes
+- background effect to make empty slots look transparent
+- short sound effects to indicate various game states
+
+- generate solveable puzzles
+- evaluate solveability of puzzles
+- ai to solve puzzles

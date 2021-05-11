@@ -1,5 +1,3 @@
-console.log("hello from JS")
-
 let t1_tubes = [
   [1,1,2,3],  // column 0
   [1,1,3,2],  // column 1
@@ -76,7 +74,15 @@ function onClick(e) {
 function createTubes(n) {
   field.innerHTML = ""
   for (let i=0; i<n * height; i++) {
-    field.innerHTML += `<div class="block" id="div${i+1}" />`
+    let r = height - (i % height)
+    let c = Math.floor(i/height) + 1
+
+    // console.log(`${i}: (${row},${column})`)
+    let html = `<div class="block"
+                     id="div${i+1}"
+                     style = "grid-area: ${r}/${c}/${r+1}/${c+1}"
+                />`
+    field.innerHTML += html
   }
 
   tubes = []
@@ -95,7 +101,6 @@ function layoutTubes() {
       let color = rcToColor(row,column)
       div.style.backgroundColor = color
       div.dataset.column = column
-      div.dataset.row = row
     }
   }
   dump()
@@ -125,6 +130,9 @@ function transfer(c1, c2) {
 
 function generatePuzzle() {
   tubes = JSON.parse(JSON.stringify(t1_tubes))
+  while (tubes.length < nColors + 2) {
+    tubes.push([])
+  }
 }
 
 function dump() {
