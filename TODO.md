@@ -15,4 +15,7 @@
 
 - generate solveable puzzles
 - evaluate solveability of puzzles
-- ai to solve puzzles
+- algorithm to solve puzzles
+
+- undo button
+- restart level button

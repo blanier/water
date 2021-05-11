@@ -7,6 +7,15 @@ let t1_tubes = [
   []
 ]
 
+let t2_tubes = [
+  [0,0,0,0],  // column 0
+  [1,1,1,1],  // column 1
+  [2,2,2,2],  // column ...
+  [3,3,3,3],
+  [],
+  []
+]
+
 let tubes = []
 
 let srcColumn = -1
@@ -43,6 +52,19 @@ function columnHeight(c) {
 
 function columnTopColor(c) {
   return tubes[c][columnHeight(c)-1]
+}
+
+function isEmpty(c) {
+  return c.length == 0
+}
+
+function isFullOfOneColor(c) {
+  if (c.length != height) { return false }
+  return c.every ( v => v==c[0])
+}
+
+function isSolved(t) {
+  return t.filter(isEmpty).filter(isFullOfOneColor)
 }
 
 function onClick(e) {
@@ -103,6 +125,12 @@ function layoutTubes() {
       div.dataset.column = column
     }
   }
+
+  if(isSolved(tubes)) {
+    console.log('%c%s',
+            'color: black; background: green; font-size: 24px;',
+            'SOLVED!!!!!!!!!')
+  }
   dump()
 }
 
@@ -129,7 +157,7 @@ function transfer(c1, c2) {
 }
 
 function generatePuzzle() {
-  tubes = JSON.parse(JSON.stringify(t1_tubes))
+  tubes = JSON.parse(JSON.stringify(t2_tubes))
   while (tubes.length < nColors + 2) {
     tubes.push([])
   }
