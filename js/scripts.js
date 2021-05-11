@@ -11,8 +11,8 @@ let t2_tubes = [
   [0,0,0,0],  // column 0
   [1,1,1,1],  // column 1
   [2,2,2,2],  // column ...
-  [3,3,3,3],
-  [],
+  [3,3,3],
+  [3],
   []
 ]
 
@@ -54,8 +54,8 @@ function columnTopColor(c) {
   return tubes[c][columnHeight(c)-1]
 }
 
-function isEmpty(c) {
-  return c.length == 0
+function isntEmpty(c) {
+  return c.length != 0
 }
 
 function isFullOfOneColor(c) {
@@ -64,7 +64,7 @@ function isFullOfOneColor(c) {
 }
 
 function isSolved(t) {
-  return t.filter(isEmpty).filter(isFullOfOneColor)
+  return t.filter(isntEmpty).every(isFullOfOneColor)
 }
 
 function onClick(e) {
@@ -168,7 +168,7 @@ function dump() {
   console.table(tubes)
   console.log(`nColors: ${nColors}`)
   for (let i=0; i<tubes.length; i++) {
-    console.log(`${i} -> ${columnTopColor(i)}`)
+    // console.log(`${i} -> ${columnTopColor(i)}`)
   }
 }
 
