@@ -19,3 +19,7 @@
 
 - undo button
 - restart level button
+
+- next puzzle button
+- puzzle Colors
+- shuffle count

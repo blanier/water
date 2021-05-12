@@ -20,7 +20,7 @@ let tubes = []
 
 let srcColumn = -1
 const colors = ["#256eff","#46237a","#3ddc97","#ff495c","#00495c",
-                "#006eff","#00237a","#00dc97","#00495c","#0049FF"]
+                "#006eff","#00237a","#722397","#00495c","#0049FF"]
 let height = 4
 let nColors = 0
 
@@ -156,8 +156,27 @@ function transfer(c1, c2) {
     layoutTubes()
 }
 
+function shuffleTubes(t) {
+  for (let i=0; i<20; i++) {
+    let r1 = Math.floor(Math.random() * height)
+    let r2 = Math.floor(Math.random() * height)
+    let c1 = Math.floor(Math.random() * t.length)
+    let c2 = Math.floor(Math.random() * t.length)
+
+    let tmp   = t[c1][r1]
+    t[c1][r1] = t[c2][r2]
+    t[c2][r2] = tmp
+  }
+}
+
 function generatePuzzle() {
-  tubes = JSON.parse(JSON.stringify(t2_tubes))
+  if (false) {
+    tubes = JSON.parse(JSON.stringify(t2_tubes))
+  } else {
+    tubes = [...Array(nColors).keys()].map(v => new Array(height).fill(v))
+    shuffleTubes(tubes)
+  }
+
   while (tubes.length < nColors + 2) {
     tubes.push([])
   }
