@@ -74,23 +74,28 @@ function onClick(e) {
     return
   }
 
-  let c = divToColumn(block)
-  if (srcColumn <0) {
-    if (columnHeight(c) > 0) {
-      srcColumn = c
-    } else {
-      srcColumn = -1
+  try {
+    let c = divToColumn(block)
+    if (srcColumn <0) {
+      if (columnHeight(c) > 0) {
+        srcColumn = c
+      } else {
+        srcColumn = -1
+      }
+      console.log(`srcColumn: ${srcColumn}`)
+      return
     }
-    console.log(`srcColumn: ${srcColumn}`)
-    return
-  }
 
-  let dstColumn = c
-  if (srcColumn == dstColumn) {
-    return
+    let dstColumn = c
+    if (srcColumn == dstColumn) {
+      srcColumn = -1
+      return
+    }
+    transfer(srcColumn, dstColumn)
+    srcColumn = -1
+  } finally {
+    layoutTubes()
   }
-  transfer(srcColumn, dstColumn)
-  srcColumn = -1
 }
 
 function createTubes(n) {
@@ -114,6 +119,8 @@ function createTubes(n) {
 
   nColors = tubes.length-2  // maybe assert somethign about the length of the color palette here
   field.style.gridTemplateColumns = `repeat(${n}, 50px)`
+
+  layoutTubes()
 }
 
 function layoutTubes() {
@@ -123,6 +130,19 @@ function layoutTubes() {
       let color = rcToColor(row,column)
       div.style.backgroundColor = color
       div.dataset.column = column
+      div.dataset.row = row
+
+      switch (true) {
+        case (row == 0):          div.dataset.bottom = undefined; break
+        case (row == height - 1): div.dataset.top = undefined; break
+        default:                  div.dataset.side = undefined; break
+      }
+
+      if (column == srcColumn) {
+        div.classList.add("selected")
+      } else {
+        div.classList.remove("selected")
+      }
     }
   }
 

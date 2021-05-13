@@ -11,6 +11,7 @@
 
 - generate grid layout for varying numbers of tubes
 - background effect to make empty slots look transparent
+- round corners of tubes
 - short sound effects to indicate various game states
 
 - generate solveable puzzles
@@ -23,3 +24,5 @@
 - next puzzle button
 - puzzle Colors
 - shuffle count
+
+- implement the Cat puzzle

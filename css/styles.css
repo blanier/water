@@ -3,4 +3,53 @@
   grid-template-rows: repeat(4, 50px);
   grid-column-gap: 13px;
   grid-row-gap: 0px;
+
+  margin-top: 60px;
+}
+
+.hidden {
+  display: none;
+}
+
+body {
+  background: lightgrey;
+}
+
+#controls {
+  margin: 10px;
+  padding: 10px;
+  background: lightBlue;
+  width: 30%;
+  text-align: center;
+  border-radius: 10px;
+}
+
+.selected {
+  position: relative;
+  top: -40px;
+}
+
+#new, #nColors, #shuffles {
+  margin-right: 30px;
+}
+
+div[data-bottom] {
+  border-bottom-right-radius: 40%;
+  border-bottom-left-radius: 40%;
+  border-bottom: solid gold;
+  border-left: solid gold;
+  border-right: solid gold;
+}
+
+div[data-top] {
+  border-top-right-radius: 10%;
+  border-top-left-radius: 10%;
+  border-top: solid gold;
+  border-left: solid gold;
+  border-right: solid gold;
+}
+
+div[data-side] {
+  border-left: solid gold;
+  border-right: solid gold;
 }
