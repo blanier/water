@@ -19,10 +19,11 @@ let t2_tubes = [
 let tubes = []
 
 let srcColumn = -1
-const colors = ["#256eff","#46237a","#3ddc97","#ff495c","#00495c",
-                "#006eff","#00237a","#722397","#00495c","#0049FF"]
+const colors = ["#007500","#E82E3C","#F6F964","#0049FF","#BDEE2F","#68C687","#31FFF3",
+                "#F636BE","#006eff","#FF5D00","#00237a","#8DA1AF","#3C1F10","#00495c"]
 let height = 4
-let nColors = 0
+let nColors = parseInt(localStorage.getItem('nColors')) || 4
+let shuffles = parseInt(localStorage.getItem('shuffles')) || 30
 
 let field = document.getElementById("tubes")
 field.addEventListener('click', onClick)
@@ -31,6 +32,7 @@ function init(n) {
   createTubes(n)
   generatePuzzle()
   layoutTubes()
+  updateControls()
 }
 
 function rcToDiv(r, c) {
@@ -39,7 +41,7 @@ function rcToDiv(r, c) {
 }
 
 function rcToColor(r, c) {
-  return colors[tubes[c][r]] || "#000000"
+  return colors[tubes[c][r]] || "#00000000"
 }
 
 function divToColumn(div) {
@@ -177,7 +179,7 @@ function transfer(c1, c2) {
 }
 
 function shuffleTubes(t) {
-  for (let i=0; i<20; i++) {
+  for (let i=0; i<shuffles; i++) {
     let r1 = Math.floor(Math.random() * height)
     let r2 = Math.floor(Math.random() * height)
     let c1 = Math.floor(Math.random() * t.length)
@@ -192,6 +194,7 @@ function shuffleTubes(t) {
 function generatePuzzle() {
   if (false) {
     tubes = JSON.parse(JSON.stringify(t2_tubes))
+    nColors = tubes.length
   } else {
     tubes = [...Array(nColors).keys()].map(v => new Array(height).fill(v))
     shuffleTubes(tubes)
@@ -203,7 +206,7 @@ function generatePuzzle() {
 }
 
 function dump() {
-  //return
+  return
   console.table(tubes)
   console.log(`nColors: ${nColors}`)
   for (let i=0; i<tubes.length; i++) {
@@ -211,4 +214,21 @@ function dump() {
   }
 }
 
-init(6)
+function updateControls() {
+  document.querySelector("#nColors").value = nColors
+  document.querySelector("#shuffles").value = shuffles
+}
+
+function controlChanged() {
+  console.log("!!!!!!!!!!!!!!!!!")
+  nColors = parseInt(document.querySelector("#nColors").value)
+  shuffles = parseInt(document.querySelector("#shuffles").value)
+
+  localStorage.setItem('nColors', nColors)
+  localStorage.setItem('shuffles', shuffles)
+
+  init(nColors+2)
+}
+
+updateControls()
+controlChanged()
