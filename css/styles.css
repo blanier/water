@@ -12,7 +12,7 @@
 }
 
 body {
-  background: lightgrey;
+  background-image: url("../images/background.jpg");
 }
 
 #controls {
