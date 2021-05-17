@@ -1,20 +1,3 @@
-let t1_tubes = [
-  [1,1,2,3],  // column 0
-  [1,1,3,2],  // column 1
-  [2,3,4,4],  // column ...
-  [4,2,3,4],
-  [],
-  []
-]
-
-let t2_tubes = [
-  [0,0,0,0],  // column 0
-  [1,1,1,1],  // column 1
-  [2,2,2,2],  // column ...
-  [3,3,3],
-  [3],
-  []
-]
 
 let tubes = []
 let history = []
@@ -28,13 +11,6 @@ let shuffles = parseInt(localStorage.getItem('shuffles')) || 30
 
 let field = document.getElementById("tubes")
 field.addEventListener('click', onClick)
-
-function init(n) {
-  createTubes(n)
-  generatePuzzle()
-  layoutTubes()
-  updateControls()
-}
 
 function rcToDiv(r, c) {
   let n = c * height + r + 1
@@ -67,7 +43,13 @@ function isFullOfOneColor(c) {
 }
 
 function isSolved(t) {
-  return t.filter(isntEmpty).every(isFullOfOneColor)
+  let filled = t.filter(isntEmpty)
+  let x = filled.every(isFullOfOneColor).length
+
+  if (filled.length != nColors || x != nColors) {
+    return false
+  }
+  return true
 }
 
 function onClick(e) {
@@ -107,17 +89,11 @@ function createTubes(n) {
     let r = height - (i % height)
     let c = Math.floor(i/height) + 1
 
-    // console.log(`${i}: (${row},${column})`)
     let html = `<div class="block"
                      id="div${i+1}"
                      style = "grid-area: ${r}/${c}/${r+1}/${c+1}"
                 />`
     field.innerHTML += html
-  }
-
-  tubes = []
-  for (i=0; i<n; i++) {
-    tubes.push([])
   }
 
   nColors = tubes.length-2  // maybe assert somethign about the length of the color palette here
@@ -161,7 +137,7 @@ function transfer(c1, c2) {
     console.log(`transfer: ${c1}->${c2}`)
     if (columnHeight(c1) == 0 || columnHeight(c2) >= height) {
       console.log("bogus column")
-      return;
+      return false
     }
 
     let color1 = columnTopColor(c1)
@@ -169,18 +145,19 @@ function transfer(c1, c2) {
 
     if (columnHeight(c2) != 0 && color1 != color2) {
       srcColumn = -1
-      return
+      return false
     }
 
     history.push(JSON.stringify(tubes))
-    console.log(history)
 
     while (columnTopColor(c1) == color1 && columnHeight(c2) < height) {
       let block = tubes[c1].pop()
       tubes[c2].push(block)
     }
 
+    localStorage.setItem('tubes', JSON.stringify(tubes))
     layoutTubes()
+    return true
 }
 
 function undo() {
@@ -198,6 +175,30 @@ function restart() {
   }
 }
 
+let stepI
+let stepJ
+
+function step() {
+  while (!transfer(stepI, stepJ)) {
+    stepJ++
+    if (stepJ > tubes.length) {
+      stepI++
+      stepJ = 0
+    }
+  }
+
+
+  if(!isSolved()) {
+    // window.requestAnimationFrame(step)
+  }
+}
+
+function solve() {
+  stepI = 0
+  stepJ = 1
+  window.requestAnimationFrame(step)
+}
+
 function shuffleTubes(t) {
   for (let i=0; i<shuffles; i++) {
     let r1 = Math.floor(Math.random() * height)
@@ -212,14 +213,8 @@ function shuffleTubes(t) {
 }
 
 function generatePuzzle() {
-  if (false) {
-    tubes = JSON.parse(JSON.stringify(t2_tubes))
-    nColors = tubes.length
-  } else {
-    tubes = [...Array(nColors).keys()].map(v => new Array(height).fill(v))
-    shuffleTubes(tubes)
-  }
-
+  tubes = [...Array(nColors).keys()].map(v => new Array(height).fill(v))
+  shuffleTubes(tubes)
   while (tubes.length < nColors + 2) {
     tubes.push([])
   }
@@ -239,7 +234,7 @@ function updateControls() {
   document.querySelector("#shuffles").value = shuffles
 }
 
-function controlChanged() {
+function controlChanged(newGame) {
   console.log("!!!!!!!!!!!!!!!!!")
   nColors = parseInt(document.querySelector("#nColors").value)
   shuffles = parseInt(document.querySelector("#shuffles").value)
@@ -247,8 +242,17 @@ function controlChanged() {
   localStorage.setItem('nColors', nColors)
   localStorage.setItem('shuffles', shuffles)
 
-  init(nColors+2)
+  if (newGame) {
+    generatePuzzle()
+    localStorage.setItem('tubes', JSON.stringify(tubes))
+  } else {
+    tubes=JSON.parse(localStorage.getItem('tubes'))
+  }
+
+  createTubes(tubes.length)
+  layoutTubes()
+  updateControls()
 }
 
 updateControls()
-controlChanged()
+controlChanged(false)

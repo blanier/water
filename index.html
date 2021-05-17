@@ -11,16 +11,17 @@
   <div id="topcontrols">
     <input class="button" type="image" src="images/restart.png" onclick="restart()"/>
     <input class="button" type="image" src="images/undo.svg" onclick="undo()"/>
+    <input class="button" type="image" src="images/solver.png" onclick="solve()"/>
   </div>
 
   <div class="grid-container" id="tubes"></div>
 
   <div id="controls">
-    <button id="new" type="button" onclick="controlChanged()">New Game</button>
+    <button id="new" type="button" onclick="controlChanged(true)">New Game</button>
     <label for="nColors">🌈</label>
-    <input type="number" id="nColors" name="nColors" min="2" max="14" onchange="controlChanged()">
+    <input type="number" id="nColors" name="nColors" min="2" max="14" onchange="controlChanged(true)">
     <label for="shuffles">🤷</label>
-    <input type="number" id="shuffles" name="shuffles" min="0" max="100" onchange="controlChanged()">
+    <input type="number" id="shuffles" name="shuffles" min="0" max="100" onchange="controlChanged(true)">
   </div>
 
   <script src="js/scripts.js"></script>
