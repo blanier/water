@@ -17,6 +17,7 @@ let t2_tubes = [
 ]
 
 let tubes = []
+let history = []
 
 let srcColumn = -1
 const colors = ["#007500","#E82E3C","#F6F964","#0049FF","#BDEE2F","#68C687","#31FFF3",
@@ -171,11 +172,30 @@ function transfer(c1, c2) {
       return
     }
 
+    history.push(JSON.stringify(tubes))
+    console.log(history)
+
     while (columnTopColor(c1) == color1 && columnHeight(c2) < height) {
       let block = tubes[c1].pop()
       tubes[c2].push(block)
     }
+
     layoutTubes()
+}
+
+function undo() {
+  console.log("undo")
+  if (history.length) {
+    tubes = JSON.parse(history.pop())
+    layoutTubes()
+  }
+}
+
+function restart() {
+  console.log("restart")
+  while(history.length) {
+    undo()
+  }
 }
 
 function shuffleTubes(t) {

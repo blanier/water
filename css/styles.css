@@ -15,6 +15,13 @@ body {
   background-image: url("../images/background.jpg");
 }
 
+.button {
+  background: lightgrey;
+  width: 5%;
+  border-radius: 10px;
+  margin-right: 2%;
+}
+
 #controls {
   margin: 10px;
   padding: 10px;
