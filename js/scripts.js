@@ -207,10 +207,11 @@ function step() {
 
 function solve() {
   moveCounter = 0
+  tree={}
   const t0 = performance.now();
   step()
   const t1 = performance.now();
-  console.log(`solve took ${moveCounter} moves in ${t1 - t0} milliseconds.`);
+  console.log(`solve took ${moveCounter} moves in ${t1-t0} milliseconds.`);
 }
 
 function shuffleTubes(t) {
