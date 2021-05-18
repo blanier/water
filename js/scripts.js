@@ -172,46 +172,54 @@ function restart() {
 
 let tree={}
 
-function step() {
+function legalMoves() {
+  let moves = []
+  for (let i=0; i<tubes.length; i++) {
+    for (j=0; j<tubes.length; j++) {
+      if (transfer(i,j)) {
+        undo()
+        moves.push([i,j])
+      }
+    }
+  }
+  return moves
+}
+
+let frame
+
+function blorp() {
+  if (isSolved(tubes)) {
+    return
+  }
+
   let key = JSON.stringify(tubes)
   let moves = tree[key]
 
   if (moves == undefined) {
-    tree[key] = []
-
-    for (let i=0; i<tubes.length; i++) {
-      for (j=0; j<tubes.length; j++) {
-        if (transfer(i,j)) {
-          undo()
-          tree[key].push([i,j])
-        }
-      }
-    }
+    moves = tree[key] = legalMoves()
+    //console.log("NEW: ",key,moves)
+  } else {
+    //console.log("REPEAT:",key,moves)
   }
 
-  while(tree[key].length > 0 && !isSolved(tubes)) {
+  let move
+  if(move = moves.pop()) {
+    //console.log(`MOVING FROM ${move[0]}->${move[1]}`)
     moveCounter++
-    let move = tree[key].pop()
-    transfer(move[0], move[1])
-    layoutTubes()
-    if (isSolved(tubes)) {
-      // debugger
-    } else {
-      step()
-      if(!isSolved(tubes)) {
-        undo()
-      }
-    }
+    let rv = transfer(move[0], move[1])
+    //console.assert(rv, "transfer shouldn't have failed")
+  } else {
+    // we're on a dead end.  Start looking elsewhere
+    undo()
   }
+  frame = requestAnimationFrame(blorp)
 }
 
+let moveCounter = 0
 function solve() {
   moveCounter = 0
-  tree={}
-  const t0 = performance.now();
-  step()
-  const t1 = performance.now();
-  console.log(`solve took ${moveCounter} moves in ${t1-t0} milliseconds.`);
+  tree=new(Object)
+  frame = requestAnimationFrame(blorp)
 }
 
 function shuffleTubes(t) {
@@ -234,7 +242,7 @@ function generatePuzzle() {
     tubes.push([])
   }
 
-  // tubes = JSON.parse("[[1,1,1,0],[0,0,0,1],[],[]]")
+  // tubes = JSON.parse("[[1,9,10,7],[3,0,0,12],[3,6,10,11],[10,5,6,12],[5,2,7,2],[5,6,4,11],[1,8,0,1],[8,9,3,10],[13,9,6,4],[13,4,13,8],[7,12,1,0],[12,7,11,11],[3,5,4,2],[2,8,13,9],[],[]]")
 }
 
 function dump() {
@@ -253,6 +261,9 @@ function updateControls() {
 
 function controlChanged(newGame) {
   console.log("!!!!!!!!!!!!!!!!!")
+
+  cancelAnimationFrame(frame)
+  
   nColors = parseInt(document.querySelector("#nColors").value)
   shuffles = parseInt(document.querySelector("#shuffles").value)
 
