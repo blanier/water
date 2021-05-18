@@ -43,13 +43,7 @@ function isFullOfOneColor(c) {
 }
 
 function isSolved(t) {
-  let filled = t.filter(isntEmpty)
-  let x = filled.every(isFullOfOneColor).length
-
-  if (filled.length != nColors || x != nColors) {
-    return false
-  }
-  return true
+  return t.filter(isntEmpty).every(isFullOfOneColor)
 }
 
 function onClick(e) {
@@ -134,9 +128,12 @@ function layoutTubes() {
 }
 
 function transfer(c1, c2) {
-    console.log(`transfer: ${c1}->${c2}`)
+    // console.log(`transfer: ${c1}->${c2}`)
+    if (c1==c2) {
+      return false
+    }
+
     if (columnHeight(c1) == 0 || columnHeight(c2) >= height) {
-      console.log("bogus column")
       return false
     }
 
@@ -161,7 +158,6 @@ function transfer(c1, c2) {
 }
 
 function undo() {
-  console.log("undo")
   if (history.length) {
     tubes = JSON.parse(history.pop())
     layoutTubes()
@@ -169,34 +165,52 @@ function undo() {
 }
 
 function restart() {
-  console.log("restart")
   while(history.length) {
     undo()
   }
 }
 
-let stepI
-let stepJ
+let tree={}
 
 function step() {
-  while (!transfer(stepI, stepJ)) {
-    stepJ++
-    if (stepJ > tubes.length) {
-      stepI++
-      stepJ = 0
+  let key = JSON.stringify(tubes)
+  let moves = tree[key]
+
+  if (moves == undefined) {
+    tree[key] = []
+
+    for (let i=0; i<tubes.length; i++) {
+      for (j=0; j<tubes.length; j++) {
+        if (transfer(i,j)) {
+          undo()
+          tree[key].push([i,j])
+        }
+      }
     }
   }
 
-
-  if(!isSolved()) {
-    // window.requestAnimationFrame(step)
+  while(tree[key].length > 0 && !isSolved(tubes)) {
+    moveCounter++
+    let move = tree[key].pop()
+    transfer(move[0], move[1])
+    layoutTubes()
+    if (isSolved(tubes)) {
+      // debugger
+    } else {
+      step()
+      if(!isSolved(tubes)) {
+        undo()
+      }
+    }
   }
 }
 
 function solve() {
-  stepI = 0
-  stepJ = 1
-  window.requestAnimationFrame(step)
+  moveCounter = 0
+  const t0 = performance.now();
+  step()
+  const t1 = performance.now();
+  console.log(`solve took ${moveCounter} moves in ${t1 - t0} milliseconds.`);
 }
 
 function shuffleTubes(t) {
@@ -218,6 +232,8 @@ function generatePuzzle() {
   while (tubes.length < nColors + 2) {
     tubes.push([])
   }
+
+  // tubes = JSON.parse("[[1,1,1,0],[0,0,0,1],[],[]]")
 }
 
 function dump() {
